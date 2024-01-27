@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  infinity-autobuilder:
+    image: infinity-autobuilder:latest
+    container_name: infinity-autobuilder
+    labels:
+
+      com.centurylinklabs.watchtower.enable : false
+    volumes:
+      - "/dockerData/infinity-autobuilder/apk:/output"
+      - "infinity-data:/data"
+    environment:
+      TZ: "Europe/Athens"
+      REDDIT_API_KEY: "your reddit api key"
+      REDDIT_USERNAME: "reddit username"
+      DISCORD_WEBHOOK: "discord webhook url"
+    restart: unless-stopped
+    
+volumes:
+  infinity-data:
+    name: infinity-autobuilder-data
