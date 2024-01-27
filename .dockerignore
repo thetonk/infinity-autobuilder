@@ -1,0 +1,4 @@
+*.json
+.venv/
+test.py
+.gitignore
