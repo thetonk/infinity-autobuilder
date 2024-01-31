@@ -9,6 +9,7 @@ user_agent = os.getenv("USER_AGENT", f"android:personal-app:0.0.1 (by /u/{your_r
 interval = os.getenv("UPDATES_CHECK_INTERVAL_SECONDS", 86400) #defaults to once a day
 webhookURL = os.getenv("DISCORD_WEBHOOK", None)
 redirect_uri = 'http://127.0.0.1'
+json_file_path = "/data/status.json"
 version = '[GitHub Repository]'
 
 def sendDiscordMessage(title: str, message:str, color: int) -> None:
@@ -27,38 +28,36 @@ else:
   print("- API token:", api_token)
   print("- Source location:", version)
 
+#clone repo if not present
 if not os.path.isdir("client"):
   repo = Repo.clone_from("https://github.com/Docile-Alligator/Infinity-For-Reddit","client")
 else:
   repo = Repo("client")
 
-if not os.path.exists("/data/status.json"):
-  latest = None
-else:
-  #avoid recompiling same version on container restart
-  with open("/data/status.json", "r") as f:
-    js = json.load(f)
-    latest = js["version"]
-
 while True:
+  compiledRelease = None
+  if os.path.exists(json_file_path):
+    with open(json_file_path, "r") as f:
+      js = json.load(f)
+      compiledRelease = js["version"]
   #discard local changes before pulling
   repo.git.reset("--hard")
   repo.remotes.origin.pull()
   os.chdir("client")
-  #get latest tag
-  if latest != next(reversed(repo.tags), None):
-    latest = next(reversed(repo.tags),None).name
-    sendDiscordMessage("New Infinity release!", f"New Infinity release found on Github! \nVersion: {latest}\nInitializing app build!", int("ffcc00",16))
+  githubRelease = next(reversed(repo.tags), None).name
+  if compiledRelease != githubRelease:
+    sendDiscordMessage("New Infinity release!", f"New Infinity release found on Github! \nVersion: {githubRelease}\nInitializing app build!", int("ffcc00",16))
     app = App(api_token, user_agent, redirect_uri)
     status = app.build()
     if status == 0:
+      compiledRelease = githubRelease
       print("direct download is ready!")
-      sendDiscordMessage("Infinity app build", f"App building for version {latest} was successful and apk is ready for download, click [here](https://private-files.sbaltsas.xyz/infinity/Infinity.apk)!", int("33cc33",16))
+      sendDiscordMessage("Infinity app build", f"App building for version {githubRelease} was successful and apk is ready for download, click [here](https://private-files.sbaltsas.xyz/infinity/Infinity.apk)!", int("33cc33",16))
     else:
       print("build failed!")
-      sendDiscordMessage("Infinity app build", f"App building for version {latest} failed! Please refer to logs for more info", int("cc0000",16))
-    with open("/data/status.json", "w") as f:
-      obj = {"version": f"{latest}"}
+      sendDiscordMessage("Infinity app build", f"App building for version {githubRelease} failed! Please refer to logs for more info", int("cc0000",16))
+    with open(json_file_path, "w") as f:
+      obj = {"version": f"{githubRelease}"}
       json.dump(obj,f)
   os.chdir(os.pardir)
   sleep(interval)

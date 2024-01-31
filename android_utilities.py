@@ -1,8 +1,8 @@
 import re,os,subprocess
 class App():
-    def __init__(self,api_token: str, user_agent: str, redirect_url: str) -> None:
+    def __init__(self,api_token: str, user_agent: str, redirect_uri: str) -> None:
         self.api_token = api_token
-        self.redirect_uri = redirect_url
+        self.redirect_uri = redirect_uri
         self.user_agent = user_agent
 
     def build(self) -> int:
