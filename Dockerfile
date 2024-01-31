@@ -13,4 +13,4 @@ ENV ANDROID_SDK_ROOT="/app/android-sdk"
 ENV PATH="$PATH:$ANDROID_SDK_ROOT/tools/bin:$ANDROID_SDK_ROOT/platform-tools"
 RUN yes | android-sdk/cmdline-tools/bin/sdkmanager  --sdk_root=$ANDROID_SDK_ROOT "platforms;android-30" "build-tools;30.0.3"
 RUN pip install --no-cache-dir -r requirements.txt
-CMD ["python3", "main.py"]
+CMD ["python3", "-u","main.py"]
