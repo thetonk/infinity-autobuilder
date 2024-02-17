@@ -1,0 +1,39 @@
+name: build-image-and-push
+on:
+  push:
+    branches:
+      - main
+jobs:
+  gitea-runner:
+    strategy:
+      matrix:
+        os: ["ubuntu-latest","arm64-ubuntu-latest"]
+        include:
+          - os: ubuntu-latest
+            arch: amd64
+          - os: arm64-ubuntu-latest
+            arch: arm64
+    runs-on: ${{ matrix.os }}
+    container:
+      image: catthehacker/ubuntu:act-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: setup buildx
+        uses: docker/setup-buildx-action@v3
+      - name: add internal registry host entry
+        run: |
+          sudo echo "${{ secrets.REGISTRY_IP }} gitea.sbaltsas.xyz" | sudo tee -a /etc/hosts
+      - name: login to Gitea Package Registry
+        uses: docker/login-action@v3
+        with:
+          registry: gitea.sbaltsas.xyz
+          username: ${{ gitea.repository_owner }}
+          password: ${{ secrets.ACCESS_TOKEN }}
+      - name: build image ${{ matrix.arch }}
+        run: >
+          docker buildx build --platform linux/${{ matrix.arch }} --output type=docker
+          -t gitea.sbaltsas.xyz/${{ gitea.repository_owner }}/web-dlp-dev:${{ matrix.arch }}_latest .
+      - name: push the fucking ${{ matrix.arch }} image
+        run: "docker push gitea.sbaltsas.xyz/${{ gitea.repository_owner }}/web-dlp-dev:${{ matrix.arch }}_latest"
+      - run: "echo job status code: ${{ job.status }}"
