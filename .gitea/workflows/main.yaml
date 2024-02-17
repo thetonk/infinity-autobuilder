@@ -33,7 +33,7 @@ jobs:
       - name: build image ${{ matrix.arch }}
         run: >
           docker buildx build --platform linux/${{ matrix.arch }} --output type=docker
-          -t gitea.sbaltsas.xyz/${{ gitea.repository }}:${{ matrix.arch }}_latest .
+          -t gitea.sbaltsas.xyz/spyros/infinity-autobuilder:${{ matrix.arch }}_latest .
       - name: push the fucking ${{ matrix.arch }} image
-        run: "docker push gitea.sbaltsas.xyz/${{ gitea.repository }}:${{ matrix.arch }}_latest"
+        run: "docker push gitea.sbaltsas.xyz/spyros/infinity-autobuilder:${{ matrix.arch }}_latest"
       - run: "echo job status code: ${{ job.status }}"
