@@ -16,6 +16,16 @@ services:
       DISCORD_WEBHOOK: "discord webhook"
       WEBSERVER_URL: "http://example.net/Infinity.apk"
     restart: unless-stopped
+
+  webserver:
+    image: nginx:latest
+    restart: unless-stopped
+    depends_on:
+      - infinity-autobuilder
+    ports:
+      - 8081:80
+    volumes:
+      - "/dockerData/infinity-autobuilder/apk:/usr/share/nginx/html"
     
 volumes:
   infinity-data:

@@ -28,6 +28,11 @@ else:
   print("- User-Agent:", user_agent)
   print("- API token:", api_token)
   print("- Source location:", version)
+  if webhookURL:
+    print("- Webhook URL: ", webhookURL)
+  if webserverURL:
+    print("- Webserver URL: ", webserverURL)
+  print(f"- Version check interval: {interval} seconds")
 
 #clone repo if not present
 if not os.path.isdir("client"):
