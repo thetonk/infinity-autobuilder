@@ -8,6 +8,7 @@ your_reddit_username = os.getenv("REDDIT_USERNAME",None)
 user_agent = os.getenv("USER_AGENT", f"android:personal-app:0.0.1 (by /u/{your_reddit_username})")
 interval = os.getenv("UPDATES_CHECK_INTERVAL_SECONDS", 86400) #defaults to once a day
 webhookURL = os.getenv("DISCORD_WEBHOOK", None)
+webserverURL = os.getenv("WEBSERVER_URL", None)
 redirect_uri = 'http://127.0.0.1'
 json_file_path = "/data/status.json"
 version = '[GitHub Repository]'
@@ -52,7 +53,10 @@ while True:
     if status == 0:
       compiledRelease = githubRelease
       print("direct download is ready!")
-      sendDiscordMessage("Infinity app build", f"App building for version {githubRelease} was successful and apk is ready for download, click [here](https://private-files.sbaltsas.xyz/infinity/Infinity.apk)!", int("33cc33",16))
+      if webserverURL != None:
+        sendDiscordMessage("Infinity app build", f"App building for version {githubRelease} was successful and apk is ready for download, click [here]({webserverURL})!", int("33cc33",16))
+      else:
+        sendDiscordMessage("Infinity app build", f"App building for version {githubRelease} was successful! You may now download the latest apk!", int("33cc33",16))
     else:
       print("build failed!")
       sendDiscordMessage("Infinity app build", f"App building for version {githubRelease} failed! Please refer to logs for more info", int("cc0000",16))

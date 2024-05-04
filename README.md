@@ -18,7 +18,8 @@ An [example docker compose file](docker-compose.yml) is provided for this purpos
 - `REDDIT_API_KEY`: Your reddit API key
 - `USER_AGENT`: User agent to use for communication with reddit (Optional)
 - `REDDIT_USERNAME`: Your username in Reddit. It will be used for user agent generation in case you did not provide the previous `USER_AGENT` variable.
-- `DISCORD_WEBHOOK`: Webhook URL for receiving notifications when a new version is released and compiled.
+- `DISCORD_WEBHOOK`: Webhook URL for receiving notifications when a new version is released and compiled. (Optional)
+- `WEBSERVER_URL`: The URL from which your Infinity.apk file will be served (Optional)
 - `UPDATES_CHECK_INTERVAL_SECONDS`: Interval for checking for new version.
 
 Finally, you may create the container with the following command;
