@@ -7,12 +7,10 @@ jobs:
   gitea-runner:
     strategy:
       matrix:
-        os: ["ubuntu-latest","arm64-ubuntu-latest"]
+        os: ["ubuntu-latest"]
         include:
           - os: ubuntu-latest
             arch: amd64
-          - os: arm64-ubuntu-latest
-            arch: arm64
     runs-on: ${{ matrix.os }}
     container:
       image: catthehacker/ubuntu:act-latest
