@@ -2,16 +2,12 @@
 
 Build from source [Infinity client app](https://github.com/Docile-Alligator/Infinity-For-Reddit) automatically when there is a new release available, using your own reddit API key!
 
-## Setup
+## Setup using docker
 Please follow the steps below;
-### Install docker and get your Reddit API Key
+
+### Getting your Reddit API Key
 First, you will need to create your own application and get its api key from your own account on reddit from [here](https://old.reddit.com/prefs/apps/). It is recommended to set the `redirect uri` to `http://127.0.0.1` .
-### Clone repository and build docker image
-Afterwards, clone this repository and build the docker image. You may build the image using the following command, root may be required;
-```sh
-$ git clone <this repo url> && cd reddit-infinity-autobuilder
-$ docker build -t infinity-autobuilder .
-```
+
 ### Set container environment variables accordingly and run
 An [example docker compose file](docker-compose.yml) is provided for this purpose. Container may be configured using the following environment variables;
 
